@@ -70,3 +70,11 @@ def editar_prestamo_id(id):
             return jsonify({'error': 'Faltan datos para editar el prestamo'}), 400
     else:
         return jsonify({'error': 'No se recibió el formato JSON'}), 400
+
+@prestamos_bp.route('/prestamos/<int:id>', methods=['DELETE'])
+def eliminar_prestamo_id(id):
+    prestamo = eliminar_prestamo_por_id(id)
+    if prestamo:
+        return jsonify(prestamo), 200
+    else:
+        return jsonify({'error': 'Prestamo no encontrado'}), 404

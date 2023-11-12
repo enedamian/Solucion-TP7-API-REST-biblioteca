@@ -68,10 +68,14 @@ def editar_prestamo_por_id(id_prestamos,socio_id,libro_id,fecha_retiro,fecha_dev
 def eliminar_prestamo_por_id(id_usuario):
     global prestamos
     # Crea una nueva lista sin el prestamo a eliminar
-    prestamos = [prestamo for prestamo in prestamos if prestamo["id"] != id_usuario]
-    exportar_a_csv()
-    if len(prestamos)>0:
-        return prestamos
+    prestamo_a_eliminar = [prestamo for prestamo in prestamos if prestamo["id"] == id_usuario]
+    if len(prestamo_a_eliminar) > 0:
+        if prestamo_a_eliminar[0]["fecha_devolucion"] == "" or datetime.datetime.strptime(prestamo_a_eliminar[0]["fecha_devolucion"]) > datetime.datetime.now():
+            return None
+        else:
+            prestamos.remove(prestamo_a_eliminar[0])
+            exportar_a_csv()
+            return prestamo_a_eliminar[0]
     else:
         return None
 
