@@ -70,6 +70,8 @@ def eliminar_prestamo_por_id(id_usuario):
     # Crea una nueva lista sin el prestamo a eliminar
     prestamo_a_eliminar = [prestamo for prestamo in prestamos if prestamo["id"] == id_usuario]
     if len(prestamo_a_eliminar) > 0:
+        # puede ser que el prestamo no tenga cargada la fecha de devolución, o que se haya pactado una devolucion futura,
+        # en ese caso no lo elimino porque todavia no se devolvio el libro
         if prestamo_a_eliminar[0]["fecha_devolucion"] == "" or datetime.datetime.strptime(prestamo_a_eliminar[0]["fecha_devolucion"]) > datetime.datetime.now():
             return None
         else:
