@@ -93,8 +93,6 @@ def editar_libro_por_id(id,titulo,autor,anio_publicacion):
     # Devuelve None si no se encuentra el libro
     return None
 
-# ACTUALIZAR NOMBRES DE FUNCIONES Y VARIBALES ---->
-
 def eliminar_libro_por_id(id):
     """
     Elimina un libro de la lista de libros por su ID.

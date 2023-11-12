@@ -13,7 +13,7 @@ def inicializar_socios():
     if os.path.exists(ruta_archivo_socios):
         importar_datos_desde_csv()
 
-def crear_usuario(dni,nombre,apellido,telefono,email):
+def crear_socio(dni,nombre,apellido,telefono,email):
     global id_socio
     # Agrega el socio a la lista con un ID único
     socios.append({
@@ -62,12 +62,16 @@ def eliminar_socio_por_id(id_usuario):
     # Crea una nueva lista sin el socio a eliminar
     socios = [socio for socio in socios if socio["id"] != id_usuario]
     exportar_a_csv()
+    if len(socios)>0:
+        return socios
+    else:
+        return None
 
 def exportar_a_csv():
     """
     Exporta los datos de socios a un archivo CSV.
     """
-    with open(ruta_archivo_socios, 'w', newline='') as csvfile:
+    with open(ruta_archivo_socios, 'w', newline='', encoding='utf8') as csvfile:
         campo_nombres = ['id','dni','nombre','apellido','telefono','email']
         writer = csv.DictWriter(csvfile, fieldnames=campo_nombres)
         writer.writeheader()
@@ -81,7 +85,7 @@ def importar_datos_desde_csv():
     global socios
     global id_socio
     socios = []  # Limpiamos la lista de socios antes de importar desde el archivo CSV
-    with open(ruta_archivo_socios, newline='') as csvfile:
+    with open(ruta_archivo_socios, newline='', encoding='utf8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             # Convertimos el ID de cadena a entero
