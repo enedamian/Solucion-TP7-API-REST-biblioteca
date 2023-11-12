@@ -108,6 +108,24 @@ def eliminar_libro_por_id(id):
     libros = [libro for libro in libros if libro["id"] != id]
     exportar_a_csv()
 
+def existe_libro(id):
+    """
+    Verifica si existe un libro con el ID especificado en la lista de libros.
+
+    Args:
+    id (int): El ID del libro a buscar.
+
+    Returns:
+    bool: True si el libro existe, False si no.
+    """
+    # Recorre la lista de libros
+    for libro in libros:
+        # Si el ID del libro coincide, devuelve True
+        if libro["id"] == id:
+            return True
+    # Devuelve False si no se encuentra el libro
+    return False
+
 def exportar_a_csv():
     """
     Exporta los datos de los libros a un archivo CSV.

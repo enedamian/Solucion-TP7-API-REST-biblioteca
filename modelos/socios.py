@@ -67,6 +67,24 @@ def eliminar_socio_por_id(id_usuario):
     else:
         return None
 
+def existe_socio(id):
+    """
+    Verifica si existe un socio con el ID especificado.
+
+    Args:
+        id (int): El ID del socio a buscar.
+
+    Returns:
+        bool: True si existe el socio, False si no existe.
+    """
+    # Recorre la lista de socios
+    for socio in socios:
+        # Si el ID del socio coincide, devuelve True
+        if socio["id"] == id:
+            return True
+    # Devuelve False si no se encuentra el socio
+    return False
+
 def exportar_a_csv():
     """
     Exporta los datos de socios a un archivo CSV.

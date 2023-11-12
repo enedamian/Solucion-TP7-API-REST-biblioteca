@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from modelos.prestamos import obtener_prestamos, obtener_prestamo_por_id, obtener_prestamos_sin_devolver, crear_prestamo, editar_prestamo_por_id, eliminar_prestamo_por_id
+from modelos.libros import existe_libro
+from modelos.socios import existe_socio
 
 # la consigna pide rutas para:
 # * Obtener la lista de todos los libros prestados que aún no se han devuelto (`GET`).
@@ -43,8 +45,14 @@ def nuevo_prestamo():
     if request.is_json:
         nuevo = request.get_json()
         if 'socio_id' in nuevo and 'libro_id' in nuevo and 'fecha_retiro' in nuevo and 'fecha_devolucion' in nuevo:
-            prestamo_creado = crear_prestamo(nuevo['socio_id'], nuevo['libro_id'], nuevo['fecha_retiro'], nuevo['fecha_devolucion'])
-            return jsonify(prestamo_creado), 201
+            if existe_libro(nuevo['libro_id']) :
+                if existe_socio(nuevo['socio_id']):
+                    prestamo_creado = crear_prestamo(nuevo['socio_id'], nuevo['libro_id'], nuevo['fecha_retiro'], nuevo['fecha_devolucion'])
+                    return jsonify(prestamo_creado), 201
+                else:
+                    return jsonify({'error': 'Socio no encontrado'}), 404
+            else:
+                return jsonify({'error': 'Libro no encontrado'}), 404
         else:
             return jsonify({'error': 'Faltan datos para crear el prestamo'}), 400
     else:
