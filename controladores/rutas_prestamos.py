@@ -69,11 +69,17 @@ def editar_prestamo_id(id):
     if request.is_json:
         nuevo = request.get_json()
         if 'socio_id' in nuevo and 'libro_id' in nuevo and 'fecha_retiro' in nuevo and 'fecha_devolucion' in nuevo:
-            prestamo = editar_prestamo_por_id(id, nuevo['socio_id'], nuevo['libro_id'], nuevo['fecha_retiro'], nuevo['fecha_devolucion'])
-            if prestamo:
-                return jsonify(prestamo), 200
+            if existe_libro(nuevo['libro_id']) :
+                if existe_socio(nuevo['socio_id']):
+                    prestamo = editar_prestamo_por_id(id, nuevo['socio_id'], nuevo['libro_id'], nuevo['fecha_retiro'], nuevo['fecha_devolucion'])
+                    if prestamo:
+                        return jsonify(prestamo), 200
+                    else:
+                        return jsonify({'error': 'Prestamo no encontrado'}), 404
+                else:
+                    return jsonify({'error': 'Socio no encontrado'}), 404
             else:
-                return jsonify({'error': 'Prestamo no encontrado'}), 404
+                return jsonify({'error': 'Libro no encontrado'}), 404
         else:
             return jsonify({'error': 'Faltan datos para editar el prestamo'}), 400
     else:
