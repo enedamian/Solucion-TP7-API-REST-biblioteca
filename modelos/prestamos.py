@@ -51,6 +51,14 @@ def obtener_prestamos_sin_devolver():
             prestamos_sin_devolver.append(prestamo)
     return prestamos_sin_devolver
 
+def libro_prestado(id_libro):
+    # Devuelve True si el libro está prestado, False en caso contrario
+    prestamos_vigentes = obtener_prestamos_sin_devolver()
+    for prestamo in prestamos_vigentes:
+        if prestamo["libro_id"] == id_libro:
+            return True
+    return False
+
 def editar_prestamo_por_id(id_prestamos,socio_id,libro_id,fecha_retiro,fecha_devolucion):
     # Recorre la lista de prestamos
     for prestamo in prestamos:

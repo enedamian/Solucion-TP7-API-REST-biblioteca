@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from modelos.prestamos import obtener_prestamos, obtener_prestamo_por_id, obtener_prestamos_sin_devolver, crear_prestamo, editar_prestamo_por_id, eliminar_prestamo_por_id
+from modelos.prestamos import obtener_prestamos, obtener_prestamo_por_id, obtener_prestamos_sin_devolver, crear_prestamo, editar_prestamo_por_id, eliminar_prestamo_por_id, libro_prestado
 from modelos.libros import existe_libro
 from modelos.socios import existe_socio
 
@@ -71,11 +71,14 @@ def editar_prestamo_id(id):
         if 'socio_id' in nuevo and 'libro_id' in nuevo and 'fecha_retiro' in nuevo and 'fecha_devolucion' in nuevo:
             if existe_libro(nuevo['libro_id']) :
                 if existe_socio(nuevo['socio_id']):
-                    prestamo = editar_prestamo_por_id(id, nuevo['socio_id'], nuevo['libro_id'], nuevo['fecha_retiro'], nuevo['fecha_devolucion'])
-                    if prestamo:
-                        return jsonify(prestamo), 200
+                    if not libro_prestado(nuevo['libro_id']):
+                        prestamo = editar_prestamo_por_id(id, nuevo['socio_id'], nuevo['libro_id'], nuevo['fecha_retiro'], nuevo['fecha_devolucion'])
+                        if prestamo:
+                            return jsonify(prestamo), 200
+                        else:
+                            return jsonify({'error': 'Prestamo no encontrado'}), 404
                     else:
-                        return jsonify({'error': 'Prestamo no encontrado'}), 404
+                        return jsonify({'error': 'El libro ya está prestado'}), 400
                 else:
                     return jsonify({'error': 'Socio no encontrado'}), 404
             else:
